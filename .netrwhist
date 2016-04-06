@@ -1,0 +1,8 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =6
+let g:netrw_dirhist_1='/Users/Cooper/Documents/dadsbackups/node_modules/parse'
+let g:netrw_dirhist_2='/usr/share/vim/vim73/colors'
+let g:netrw_dirhist_3='/Users/Cooper/.vim'
+let g:netrw_dirhist_4='/Users/Cooper/Documents/machine-learning/projects/2'
+let g:netrw_dirhist_5='/Users/Cooper/Documents/algorithms/template'
+let g:netrw_dirhist_6='/Users/Cooper/.vim/bundle'
