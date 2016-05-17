@@ -1,10 +1,9 @@
 syntax enable
 execute pathogen#infect()
-let mapleader = ","
-let g:mapleader = ","
+let mapleader = "\<Space>"
+let g:mapleader = "\<Space>"
 filetype plugin on
 filetype indent on
-imap jj <Esc>
 imap jk <Esc>
 set backspace=2
 colorscheme molokai
@@ -90,3 +89,41 @@ set completeopt-=preview
 nmap <-Enter> o<Esc>
 set fillchars+=vert:\ 
 set hlsearch
+command! -complete=shellcmd -nargs=+ Shell call s:RunShellCommand(<q-args>)
+function! s:RunShellCommand(cmdline)
+  let isfirst = 1
+  let words = []
+  for word in split(a:cmdline)
+    if isfirst
+      let isfirst = 0  " don't change first word (shell command)
+    else
+      if word[0] =~ '\v[%#<]'
+        let word = expand(word)
+      endif
+      let word = shellescape(word, 1)
+    endif
+    call add(words, word)
+  endfor
+  let expanded_cmdline = join(words)
+  botright new
+  setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile nowrap
+  "call setline(1, 'You entered:  ' . a:cmdline)
+  call setline(1, expanded_cmdline)
+  call append(line('$'), substitute(getline(2), '.', '=', 'g'))
+  silent execute '$read !'. expanded_cmdline
+  1
+endfunction
+
+set autowriteall
+map <Leader>d :bdelete<CR>
+noremap <Up> <NOP>
+noremap <Down> <NOP>
+noremap <Left> <NOP>
+noremap <Right> <NOP>
+
+function! Doc()
+    " ~/vim/cpp/new-class.txt is the path to the template file
+    r~/.vim/templates/doc.tex
+endfunction
+
+nmap <Leader>1 :call Doc()<CR>
