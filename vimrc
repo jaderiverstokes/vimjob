@@ -1,4 +1,6 @@
 syntax enable
+
+
 execute pathogen#infect()
 let mapleader = "\<Space>"
 let g:mapleader = "\<Space>"
@@ -127,3 +129,11 @@ function! Doc()
 endfunction
 
 nmap <Leader>1 :call Doc()<CR>
+nnoremap ; :
+set tags=~/.tags
+nnoremap <silent> gt <C-]>
+nnoremap <silent> gb <C-T>
+nnoremap <Leader>t :Silent ctags -R -a -o ~/.tags `pwd` <CR>
+set foldlevel=99
+"Silent commands
+command! -nargs=1 Silent execute ':silent !'.<q-args> | execute ':redraw!'
