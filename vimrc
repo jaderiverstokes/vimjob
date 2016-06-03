@@ -137,3 +137,6 @@ nnoremap <Leader>t :Silent ctags -R -a -o ~/.tags `pwd` <CR>
 set foldlevel=99
 "Silent commands
 command! -nargs=1 Silent execute ':silent !'.<q-args> | execute ':redraw!'
+
+set clipboard=unnamed
+autocmd BufNewFile,BufRead *.md set filetype=markdown
