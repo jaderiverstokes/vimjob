@@ -130,10 +130,11 @@ endfunction
 
 nmap <Leader>1 :call Doc()<CR>
 nnoremap ; :
-set tags=~/.tags
+set tags=.tags;/
 nnoremap <silent> gt <C-]>
 nnoremap <silent> gb <C-T>
-nnoremap <Leader>t :Silent ctags -R -a -o ~/.tags `pwd` <CR>
+nnoremap <Leader>t :Silent ctags -R  -o ./.tags `pwd` <CR>
 set foldlevel=99
 "Silent commands
 command! -nargs=1 Silent execute ':silent !'.<q-args> | execute ':redraw!'
+nnoremap <Leader>p :CtrlP<CR>;wq
