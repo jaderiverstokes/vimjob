@@ -1,6 +1,6 @@
 syntax enable
 
-
+set clipboard=unnamed
 execute pathogen#infect()
 let mapleader = "\<Space>"
 let g:mapleader = "\<Space>"
