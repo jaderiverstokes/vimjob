@@ -1,14 +1,24 @@
 syntax enable
 
+
+" Always show powerline
+set laststatus=2
+
+
 set clipboard=unnamed
 execute pathogen#infect()
+call Pl#Theme#RemoveSegment('fileencoding')
+call Pl#Theme#RemoveSegment('fileformat')
 let mapleader = "\<Space>"
 let g:mapleader = "\<Space>"
 filetype plugin on
 filetype indent on
 imap jk <Esc>
 set backspace=2
+
 colorscheme molokai
+
+
 set dictionary="/usr/dict/words"
 let g:syntastic_loc_list_height=1
 let g:syntastic_check_on_wq = 1
