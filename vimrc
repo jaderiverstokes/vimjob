@@ -1,12 +1,37 @@
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
 syntax enable
 
 
+Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'JuliaLang/julia-vim'
+Plugin 'scrooloose/nerdcommenter'
+Plugin 'scrooloose/nerdtree'
+Plugin 'tmhedberg/SimpylFold'
+Plugin 'ervandew/supertab'
+Plugin 'scrooloose/syntastic'
+Plugin 'tomtom/tlib_vim'
+Plugin 'joonty/vdebug'
+Plugin 'MarcWeber/vim-addon-mw-utils'
+Plugin 'easymotion/vim-easymotion'
+Plugin 'tpope/vim-fugitive'
+Plugin 'Lokaltog/vim-powerline'
+Plugin 'garbas/vim-snipmate'
+Plugin 'bpeebles/wells-colorscheme.vim'
 " Always show powerline
+call vundle#end()            " required
+filetype plugin indent on    " required
 set laststatus=2
 
 
+
+
 set clipboard=unnamed
-execute pathogen#infect()
+" execute pathogen#infect()
 call Pl#Theme#RemoveSegment('fileencoding')
 call Pl#Theme#RemoveSegment('fileformat')
 let mapleader = "\<Space>"
