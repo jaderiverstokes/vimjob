@@ -1,14 +1,49 @@
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
 syntax enable
 
 
-execute pathogen#infect()
+Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'JuliaLang/julia-vim'
+Plugin 'scrooloose/nerdcommenter'
+Plugin 'scrooloose/nerdtree'
+Plugin 'tmhedberg/SimpylFold'
+Plugin 'ervandew/supertab'
+Plugin 'scrooloose/syntastic'
+Plugin 'tomtom/tlib_vim'
+Plugin 'joonty/vdebug'
+Plugin 'MarcWeber/vim-addon-mw-utils'
+Plugin 'easymotion/vim-easymotion'
+Plugin 'tpope/vim-fugitive'
+Plugin 'Lokaltog/vim-powerline'
+Plugin 'garbas/vim-snipmate'
+Plugin 'bpeebles/wells-colorscheme.vim'
+" Always show powerline
+call vundle#end()            " required
+filetype plugin indent on    " required
+set laststatus=2
+
+
+
+
+set clipboard=unnamed
+" execute pathogen#infect()
+call Pl#Theme#RemoveSegment('fileencoding')
+call Pl#Theme#RemoveSegment('fileformat')
 let mapleader = "\<Space>"
 let g:mapleader = "\<Space>"
 filetype plugin on
 filetype indent on
 imap jk <Esc>
 set backspace=2
+
 colorscheme molokai
+
+
 set dictionary="/usr/dict/words"
 let g:syntastic_loc_list_height=1
 let g:syntastic_check_on_wq = 1
@@ -70,7 +105,7 @@ set t_vb=
 
 nnoremap <Leader>x :NERDTreeToggle <CR>
 nmap s <Plug>(easymotion-overwin-f2)
-nnoremap <Leader>f :set hidden<CR> :bnext<CR>
+nnoremap <Leader>f :bnext<CR>
 nnoremap <Leader>w <C-w>c
 nnoremap <Leader>l :set hidden<CR> :b#<CR>
 nnoremap vv :vsplit<CR>
@@ -88,7 +123,6 @@ command -nargs=0 -bar Update if &modified
                            \|endif
 nnoremap <silent> S :<C-u>Update<CR>
 set completeopt-=preview
-nmap <-Enter> o<Esc>
 set fillchars+=vert:\ 
 set hlsearch
 command! -complete=shellcmd -nargs=+ Shell call s:RunShellCommand(<q-args>)
@@ -118,10 +152,10 @@ endfunction
 
 set autowriteall
 map <Leader>d :bdelete<CR>
-noremap <Up> <NOP>
-noremap <Down> <NOP>
-noremap <Left> <NOP>
-noremap <Right> <NOP>
+"noremap <Up> <NOP>
+"noremap <Down> <NOP>
+"noremap <Left> <NOP>
+"noremap <Right> <NOP>
 
 function! Doc()
     " ~/vim/cpp/new-class.txt is the path to the template file
@@ -130,13 +164,16 @@ endfunction
 
 nmap <Leader>1 :call Doc()<CR>
 nnoremap ; :
-set tags=~/.tags
+set tags=.tags;/
 nnoremap <silent> gt <C-]>
 nnoremap <silent> gb <C-T>
-nnoremap <Leader>t :Silent ctags -R -a -o ~/.tags `pwd` <CR>
+nnoremap <Leader>t :Silent ctags -R  -o ./.tags `pwd` <CR>
 set foldlevel=99
 "Silent commands
 command! -nargs=1 Silent execute ':silent !'.<q-args> | execute ':redraw!'
 
 set clipboard=unnamed
 autocmd BufNewFile,BufRead *.md set filetype=markdown
+nnoremap <Leader>p :CtrlP<CR>;wq
+nmap <Leader>n :set nu!<CR>
+au FileType yaml setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
