@@ -22,6 +22,10 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'Lokaltog/vim-powerline'
 Plugin 'garbas/vim-snipmate'
 Plugin 'bpeebles/wells-colorscheme.vim'
+Plugin 'tpope/vim-surround'
+Plugin 'airblade/vim-gitgutter'
+Plugin 'flazz/vim-colorschemes'
+
 " Always show powerline
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -39,9 +43,11 @@ let g:mapleader = "\<Space>"
 filetype plugin on
 filetype indent on
 imap jk <Esc>
+vmap jk <Esc> 
 set backspace=2
 
-colorscheme molokai
+colorscheme blackboard
+" colorscheme PaperColor
 
 
 set dictionary="/usr/dict/words"
@@ -177,3 +183,5 @@ autocmd BufNewFile,BufRead *.md set filetype=markdown
 nnoremap <Leader>p :CtrlP<CR>;wq
 nmap <Leader>n :set nu!<CR>
 au FileType yaml setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
+au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
+au BufNewFile,BufFilePre,BufRead *.jl set filetype=julia
