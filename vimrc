@@ -25,6 +25,7 @@ Plugin 'bpeebles/wells-colorscheme.vim'
 Plugin 'tpope/vim-surround'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'flazz/vim-colorschemes'
+Plugin 'majutsushi/tagbar'
 
 " Always show powerline
 call vundle#end()            " required
@@ -170,7 +171,7 @@ endfunction
 
 nmap <Leader>1 :call Doc()<CR>
 nnoremap ; :
-set tags=.tags;/
+set tags=tags;/
 nnoremap <silent> gt <C-]>
 nnoremap <silent> gb <C-T>
 nnoremap <Leader>t :Silent ctags -R  -o ./.tags `pwd` <CR>
