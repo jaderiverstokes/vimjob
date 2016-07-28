@@ -26,6 +26,8 @@ Plugin 'tpope/vim-surround'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'flazz/vim-colorschemes'
 Plugin 'majutsushi/tagbar'
+Plugin 'alvan/vim-closetag'
+Plugin 'bronson/vim-trailing-whitespace'
 
 " Always show powerline
 call vundle#end()            " required
@@ -44,7 +46,7 @@ let g:mapleader = "\<Space>"
 filetype plugin on
 filetype indent on
 imap jk <Esc>
-vmap jk <Esc> 
+vmap jk <Esc>
 set backspace=2
 
 "colorscheme blackboard
@@ -67,7 +69,7 @@ set title
 " Ignore case when searching
 set ignorecase
 "
-" When searching try to be smart about cases 
+" When searching try to be smart about cases
 set smartcase
 " Better tabing
 vnoremap < <gv
@@ -77,7 +79,7 @@ nnoremap > >>
 nnoremap < <<
 set magic
 " Show matching brackets when text indicator is over them
-set showmatch 
+set showmatch
 " How many tenths of a second to blink when matching brackets
 set mat=2
 
@@ -121,7 +123,7 @@ map <Leader>O zR
 map <Leader>C zM
 map <Leader>o zA
 map <Leader>c zA
-command -nargs=0 -bar Update if &modified 
+command -nargs=0 -bar Update if &modified
                            \|    if empty(bufname('%'))
                            \|        browse confirm write
                            \|    else
