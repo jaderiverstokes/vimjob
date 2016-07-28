@@ -25,6 +25,7 @@ Plugin 'bpeebles/wells-colorscheme.vim'
 Plugin 'tpope/vim-surround'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'flazz/vim-colorschemes'
+Plugin 'majutsushi/tagbar'
 
 " Always show powerline
 call vundle#end()            " required
@@ -108,7 +109,7 @@ set t_vb=
 
 nnoremap <Leader>x :NERDTreeToggle <CR>
 nmap s <Plug>(easymotion-overwin-f2)
-nnoremap <Leader>f :set hidden<CR> :bnext<CR>
+nnoremap <Leader>f :bnext<CR>
 nnoremap <Leader>w <C-w>c
 nnoremap <Leader>l :set hidden<CR> :b#<CR>
 nnoremap vv :vsplit<CR>
@@ -167,13 +168,24 @@ endfunction
 
 nmap <Leader>1 :call Doc()<CR>
 nnoremap ; :
-set tags=.tags;/
+set tags=tags;/
 nnoremap <silent> gt <C-]>
 nnoremap <silent> gb <C-T>
 nnoremap <Leader>t :Silent ctags -R  -o ./.tags `pwd` <CR>
 set foldlevel=99
 "Silent commands
 command! -nargs=1 Silent execute ':silent !'.<q-args> | execute ':redraw!'
+
+set clipboard=unnamed
+autocmd BufNewFile,BufRead *.md set filetype=markdown
 nnoremap <Leader>p :CtrlP<CR>;wq
+nmap <Leader>n :set nu!<CR>
+au FileType yaml setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
 au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
 au BufNewFile,BufFilePre,BufRead *.jl set filetype=julia
+let g:autosave = 1
+let g:auto_save_silent = 1
+
+
+
+nnoremap gs :Gstatus<CR>
