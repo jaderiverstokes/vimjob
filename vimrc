@@ -46,8 +46,8 @@ imap jk <Esc>
 vmap jk <Esc> 
 set backspace=2
 
-colorscheme blackboard
-" colorscheme PaperColor
+"colorscheme blackboard
+colorscheme PaperColor
 
 
 set dictionary="/usr/dict/words"
@@ -185,3 +185,5 @@ nmap <Leader>n :set nu!<CR>
 au FileType yaml setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
 au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
 au BufNewFile,BufFilePre,BufRead *.jl set filetype=julia
+let g:autosave = 1
+let g:auto_save_silent = 1
