@@ -31,9 +31,6 @@ call vundle#end()            " required
 filetype plugin indent on    " required
 set laststatus=2
 
-
-
-
 set clipboard=unnamed
 " execute pathogen#infect()
 call Pl#Theme#RemoveSegment('fileencoding')
@@ -46,8 +43,8 @@ imap jk <Esc>
 vmap jk <Esc> 
 set backspace=2
 
-colorscheme blackboard
-" colorscheme PaperColor
+"colorscheme blackboard
+colorscheme PaperColor
 
 
 set dictionary="/usr/dict/words"
@@ -129,7 +126,6 @@ command -nargs=0 -bar Update if &modified
                            \|endif
 nnoremap <silent> S :<C-u>Update<CR>
 set completeopt-=preview
-nmap <-Enter> o<Esc>
 set fillchars+=vert:\ 
 set hlsearch
 command! -complete=shellcmd -nargs=+ Shell call s:RunShellCommand(<q-args>)
