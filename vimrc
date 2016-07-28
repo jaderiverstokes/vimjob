@@ -158,10 +158,10 @@ endfunction
 
 set autowriteall
 map <Leader>d :bdelete<CR>
-"noremap <Up> <NOP>
-"noremap <Down> <NOP>
-"noremap <Left> <NOP>
-"noremap <Right> <NOP>
+noremap <Up> <NOP>
+noremap <Down> <NOP>
+noremap <Left> <NOP>
+noremap <Right> <NOP>
 
 function! Doc()
     " ~/vim/cpp/new-class.txt is the path to the template file
@@ -187,3 +187,7 @@ au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
 au BufNewFile,BufFilePre,BufRead *.jl set filetype=julia
 let g:autosave = 1
 let g:auto_save_silent = 1
+
+
+
+nnoremap gs :Gstatus<CR>
