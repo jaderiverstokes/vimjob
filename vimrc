@@ -25,7 +25,7 @@ Plugin 'bpeebles/wells-colorscheme.vim'
 Plugin 'tpope/vim-surround'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'flazz/vim-colorschemes'
-Plugin 'majutsushi/tagbar'
+Plugin 'cooper-sloan/tagbar'
 Plugin 'alvan/vim-closetag'
 Plugin 'bronson/vim-trailing-whitespace'
 
@@ -109,7 +109,7 @@ set number
 set visualbell
 set t_vb=
 
-nnoremap <Leader>x :NERDTreeToggle <CR>
+nnoremap <Leader>x :NERDTreeFocus <CR>
 nmap s <Plug>(easymotion-overwin-f2)
 nnoremap <Leader>f :bnext<CR>
 nnoremap <Leader>w <C-w>c
@@ -191,3 +191,28 @@ let g:auto_save_silent = 1
 
 
 nnoremap gs :Gstatus<CR>
+nnoremap <Leader>y :TagbarToggle<CR>
+function! NERDTreeQuit()
+  redir => buffersoutput
+  silent buffers
+  redir END
+"                     1BufNo  2Mods.     3File           4LineNo
+  let pattern = '^\s*\(\d\+\)\(.....\) "\(.*\)"\s\+line \(\d\+\)$'
+  let windowfound = 0
+
+  for bline in split(buffersoutput, "\n")
+    let m = matchlist(bline, pattern)
+
+    if (len(m) > 0)
+      if (m[2] =~ '..a..')
+        let windowfound = 1
+      endif
+    endif
+  endfor
+
+  if (!windowfound)
+    quitall
+  endif
+endfunction
+autocmd WinEnter * call NERDTreeQuit()
+let g:closetag_filenames = "*.html,*.xml"
