@@ -1,1 +1,1 @@
-nnoremap <silent> <leader>r :wa<CR>: !clear;node %<CR>
+nnoremap <silent> <leader>r :wa<CR>:Shell node %<CR>

@@ -28,6 +28,7 @@ Plugin 'flazz/vim-colorschemes'
 Plugin 'cooper-sloan/tagbar'
 Plugin 'alvan/vim-closetag'
 Plugin 'bronson/vim-trailing-whitespace'
+Plugin 'mileszs/ack.vim'
 
 " Always show powerline
 call vundle#end()            " required
@@ -43,7 +44,7 @@ let g:mapleader = "\<Space>"
 filetype plugin on
 filetype indent on
 imap jk <Esc>
-vmap jk <Esc>
+"vmap jk <Esc>
 set backspace=2
 
 "colorscheme blackboard
@@ -112,7 +113,7 @@ set t_vb=
 nnoremap <Leader>x :NERDTreeFocus <CR>
 nmap s <Plug>(easymotion-overwin-f2)
 nnoremap <Leader>f :bnext<CR>
-nnoremap <Leader>w <C-w>c
+nnoremap <Leader>w :w<CR><C-w>c
 nnoremap <Leader>l :set hidden<CR> :b#<CR>
 nnoremap vv :vsplit<CR>
 nnoremap <Leader>s <C-w><C-w>
@@ -157,18 +158,22 @@ function! s:RunShellCommand(cmdline)
 endfunction
 
 set autowriteall
-map <Leader>d :bdelete<CR>
+map <Leader>d :w<CR>:bdelete<CR>
 noremap <Up> <NOP>
 noremap <Down> <NOP>
 noremap <Left> <NOP>
 noremap <Right> <NOP>
 
 function! Doc()
-    " ~/vim/cpp/new-class.txt is the path to the template file
     r~/.vim/templates/doc.tex
 endfunction
 
+function! Html()
+    r~/.vim/templates/doc.html
+endfunction
+
 nmap <Leader>1 :call Doc()<CR>
+nmap <Leader>2 :call Html()<CR>
 nnoremap ; :
 set tags=tags;/
 nnoremap <silent> gt <C-]>
@@ -191,6 +196,7 @@ let g:auto_save_silent = 1
 
 
 nnoremap gs :Gstatus<CR>
+nnoremap gc :Gcommit<CR>
 nnoremap <Leader>y :TagbarToggle<CR>
 function! NERDTreeQuit()
   redir => buffersoutput
@@ -216,3 +222,7 @@ function! NERDTreeQuit()
 endfunction
 autocmd WinEnter * call NERDTreeQuit()
 let g:closetag_filenames = "*.html,*.xml"
+if executable('ag')
+  let g:ackprg = 'ag --vimgrep'
+endif
+nnoremap <Leader>a :Ack! 
