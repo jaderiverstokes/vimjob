@@ -43,6 +43,7 @@ let mapleader = "\<Space>"
 let g:mapleader = "\<Space>"
 filetype plugin on
 filetype indent on
+set smartindent
 imap jk <Esc>
 "vmap jk <Esc>
 set backspace=2
@@ -226,3 +227,4 @@ if executable('ag')
   let g:ackprg = 'ag --vimgrep'
 endif
 nnoremap <Leader>a :Ack! 
+nnoremap <Leader>i mzgg=G`z
