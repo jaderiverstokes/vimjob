@@ -1,1 +1,1 @@
-nnoremap <silent> <leader>r :wa<CR>: Shell python %<CR>
+nnoremap <silent> <Leader>r :wa<CR>: Shell python %<CR>
