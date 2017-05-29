@@ -20,7 +20,8 @@ Plugin 'MarcWeber/vim-addon-mw-utils'
 Plugin 'easymotion/vim-easymotion'
 Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-repeat'
-Plugin 'Lokaltog/vim-powerline'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
 Plugin 'garbas/vim-snipmate'
 Plugin 'bpeebles/wells-colorscheme.vim'
 Plugin 'tpope/vim-surround'
@@ -33,7 +34,7 @@ Plugin 'mileszs/ack.vim'
 Plugin 'mtth/scratch.vim'
 Plugin 'pangloss/vim-javascript'
 Plugin 'mxw/vim-jsx'
-Plugin 'jiangmiao/auto-pairs'
+Plugin 'raimondi/delimitmate'
 Plugin 'wikitopian/hardmode'
 " Always show powerline
 set relativenumber
@@ -58,7 +59,9 @@ imap kJ <Esc>
 set backspace=2
 
 "colorscheme blackboard
-colorscheme PaperColor
+"colorscheme PaperColor
+"colorscheme gruvbox
+colorscheme Tomorrow-Night
 
 
 
@@ -69,9 +72,9 @@ let g:syntastic_check_on_open = 0
 let g:syntastic_auto_loc_list = 0
 let g:syntastic_always_populate_loc_list = 0
 let g:syntastic_quiet_messages = { "type": "style" }
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
 set copyindent
 set viminfo='100,h
 set title
@@ -257,4 +260,21 @@ if has('persistent_undo')
     let &undodir = myUndoDir
     set undofile
 endif
+
 let g:jsx_ext_required = 0
+let g:airline_theme='distinguished'
+let g:airline_powerline_fonts = 0
+let g:airline_left_sep = ''
+let g:airline_right_sep = ''
+set statusline-=ffenc
+let g:airline_section_y=''
+let g:airline_section_z=''
+let g:airline_section_c='%t'
+let g:airline_detect_modified=0
+let g:airline_section_error=''
+let g:airline_section_warning=''
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
+set noshowmode
+vnoremap . :normal .<CR>
