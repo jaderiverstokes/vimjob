@@ -8,10 +8,12 @@ syntax enable
 
 
 Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'terryma/vim-multiple-cursors'
 Plugin 'JuliaLang/julia-vim'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'scrooloose/nerdtree'
 Plugin 'tmhedberg/SimpylFold'
+Plugin 'othree/html5.vim'
 Plugin 'ervandew/supertab'
 Plugin 'scrooloose/syntastic'
 Plugin 'tomtom/tlib_vim'
@@ -72,9 +74,6 @@ let g:syntastic_check_on_open = 0
 let g:syntastic_auto_loc_list = 0
 let g:syntastic_always_populate_loc_list = 0
 let g:syntastic_quiet_messages = { "type": "style" }
-"set statusline+=%#warningmsg#
-"set statusline+=%{SyntasticStatuslineFlag()}
-"set statusline+=%*
 set copyindent
 set viminfo='100,h
 set title
@@ -142,7 +141,7 @@ command -nargs=0 -bar Update if &modified
                           \|        confirm write
                           \|    endif
                           \|endif
-nnoremap <silent> S :<C-u>Update<CR>
+"nnoremap <silent> S :<C-u>Update<CR>
 set completeopt-=preview
 set fillchars+=vert:\ 
 set hlsearch
@@ -206,8 +205,6 @@ au FileType yaml setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
 au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
 au BufNewFile,BufFilePre,BufRead *.jl set filetype=julia
 autocmd TextChanged,TextChangedI <buffer> silent write
-
-
 
 nnoremap gs :Gstatus<CR>
 nnoremap gc :Gcommit<CR>
