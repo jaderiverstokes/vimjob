@@ -6,7 +6,6 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 syntax enable
 
-
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'terryma/vim-multiple-cursors'
 Plugin 'JuliaLang/julia-vim'
@@ -63,8 +62,8 @@ set backspace=2
 "colorscheme blackboard
 "colorscheme PaperColor
 "colorscheme gruvbox
-colorscheme Tomorrow-Night
 
+colorscheme Tomorrow-Night
 
 
 set dictionary="/usr/dict/words"
@@ -126,7 +125,7 @@ set t_vb=
 nnoremap <Leader>x :NERDTreeFocus <CR>
 nmap s <Plug>(easymotion-overwin-f2)
 nnoremap <Leader>f :bnext<CR>
-nnoremap <Leader>w :w<CR><C-w>c
+nnoremap <Leader>w <C-w>c
 nnoremap <Leader>l :set hidden<CR> :b#<CR>
 nnoremap vv :vsplit<CR>
 nnoremap <Leader>s <C-w><C-w>
@@ -134,55 +133,55 @@ map <Leader>O zR
 map <Leader>C zM
 map <Leader>o zA
 map <Leader>c zA
-command -nargs=0 -bar Update if &modified
-                          \|    if empty(bufname('%'))
-                          \|        browse confirm write
-                          \|    else
-                          \|        confirm write
-                          \|    endif
-                          \|endif
+"command -nargs=0 -bar Update if &modified
+"\|    if empty(bufname('%'))
+"\|        browse confirm write
+"\|    else
+"\|        confirm write
+"\|    endif
+"\|endif
 "nnoremap <silent> S :<C-u>Update<CR>
 set completeopt-=preview
 set fillchars+=vert:\ 
 set hlsearch
 command! -complete=shellcmd -nargs=+ Shell call s:RunShellCommand(<q-args>)
 function! s:RunShellCommand(cmdline)
- let isfirst = 1
- let words = []
- for word in split(a:cmdline)
-   if isfirst
-     let isfirst = 0  " don't change first word (shell command)
-   else
-     if word[0] =~ '\v[%#<]'
-       let word = expand(word)
-     endif
-     let word = shellescape(word, 1)
-   endif
-   call add(words, word)
- endfor
- let expanded_cmdline = join(words)
- botright new
- setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile nowrap
- "call setline(1, 'You entered:  ' . a:cmdline)
- call setline(1, expanded_cmdline)
- call append(line('$'), substitute(getline(2), '.', '=', 'g'))
- silent execute '$read !'. expanded_cmdline
- 1
+    let isfirst = 1
+    let words = []
+    for word in split(a:cmdline)
+        if isfirst
+            let isfirst = 0  " don't change first word (shell command)
+        else
+            if word[0] =~ '\v[%#<]'
+                let word = expand(word)
+            endif
+            let word = shellescape(word, 1)
+        endif
+        call add(words, word)
+    endfor
+    let expanded_cmdline = join(words)
+    botright new
+    setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile nowrap
+    "call setline(1, 'You entered:  ' . a:cmdline)
+    call setline(1, expanded_cmdline)
+    call append(line('$'), substitute(getline(2), '.', '=', 'g'))
+    silent execute '$read !'. expanded_cmdline
+    1
 endfunction
 
 set autowriteall
-map <Leader>d :w<CR>:bdelete<CR>
+map <Leader>d :bdelete<CR>
 noremap <Up> <NOP>
 noremap <Down> <NOP>
 noremap <Left> <NOP>
 noremap <Right> <NOP>
 
 function! Doc()
-   r~/.vim/templates/doc.tex
+    r~/.vim/templates/doc.tex
 endfunction
 
 function! Html()
-   r~/.vim/templates/doc.html
+    r~/.vim/templates/doc.html
 endfunction
 
 nmap <Leader>1 :call Doc()<CR>
@@ -191,7 +190,7 @@ nmap <Leader>3 :r~/.vim/templates/template.tex<CR>
 set tags=.tags;/
 nnoremap <silent> gt <C-]>
 nnoremap <silent> gb <C-T>
-nnoremap <Leader>t :Silent ctags -R  -o ./.tags `pwd` <CR>
+nnoremap <Leader>t :Silent ctags -R --exclude=@/Users/csloan/.ctagsignore  -o ./.tags `pwd` <CR>
 set foldlevel=99
 "Silent commands
 command! -nargs=1 Silent execute ':silent !'.<q-args> | execute ':redraw!'
@@ -199,6 +198,8 @@ command! -nargs=1 Silent execute ':silent !'.<q-args> | execute ':redraw!'
 set clipboard=unnamed
 autocmd BufNewFile,BufRead *.md set filetype=markdown
 autocmd BufNewFile,BufRead *.hbs set filetype=html
+autocmd BufNewFile,BufRead *.py_in set filetype=python
+autocmd BufNewFile,BufRead *.sql_in set filetype=sql
 nnoremap <Leader>p :CtrlP<CR>;wq
 nmap <Leader>n :set nu!<CR>
 au FileType yaml setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
@@ -210,31 +211,31 @@ nnoremap gs :Gstatus<CR>
 nnoremap gc :Gcommit<CR>
 nnoremap <Leader>y :TagbarToggle<CR>
 function! NERDTreeQuit()
- redir => buffersoutput
- silent buffers
- redir END
-                     "1BufNo  2Mods.     3File           4LineNo
- let pattern = '^\s*\(\d\+\)\(.....\) "\(.*\)"\s\+line \(\d\+\)$'
- let windowfound = 0
+    redir => buffersoutput
+    silent buffers
+    redir END
+    "1BufNo  2Mods.     3File           4LineNo
+    let pattern = '^\s*\(\d\+\)\(.....\) "\(.*\)"\s\+line \(\d\+\)$'
+    let windowfound = 0
 
- for bline in split(buffersoutput, "\n")
-   let m = matchlist(bline, pattern)
+    for bline in split(buffersoutput, "\n")
+        let m = matchlist(bline, pattern)
 
-   if (len(m) > 0)
-     if (m[2] =~ '..a..')
-       let windowfound = 1
-     endif
-   endif
- endfor
+        if (len(m) > 0)
+            if (m[2] =~ '..a..')
+                let windowfound = 1
+            endif
+        endif
+    endfor
 
- if (!windowfound)
-   quitall
- endif
+    if (!windowfound)
+        quitall
+    endif
 endfunction
 autocmd WinEnter * call NERDTreeQuit()
 let g:closetag_filenames = "*.html,*.xml,*.hbs"
 if executable('ag')
- let g:ackprg = 'ag --vimgrep'
+    let g:ackprg = 'ag --vimgrep'
 endif
 nnoremap <Leader>a :Ack! 
 nnoremap <Leader>i mzgg=G`z
@@ -275,3 +276,6 @@ let g:airline_section_warning=''
 "set statusline+=%*
 set noshowmode
 vnoremap . :normal .<CR>
+let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git\|build'
+":Shell pushd ~/incubator-madlib/build && make || popd <CR>
+nnoremap <Leader>m :!pushd ~/incubator-madlib/build && make \|\| popd<CR>
