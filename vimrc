@@ -1,12 +1,16 @@
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
+let $BASH_ENV = "~/.bash_aliases"
+
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 syntax enable
-
+"Plugin 'python-mode/python-mode'
 Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'skywind3000/asyncrun.vim'
+Plugin 'Chiel92/vim-autoformat'
 Plugin 'terryma/vim-multiple-cursors'
 Plugin 'JuliaLang/julia-vim'
 Plugin 'scrooloose/nerdcommenter'
@@ -14,7 +18,9 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'tmhedberg/SimpylFold'
 Plugin 'othree/html5.vim'
 Plugin 'ervandew/supertab'
-Plugin 'scrooloose/syntastic'
+Plugin 'joonty/vim-do'
+"Plugin 'scrooloose/syntastic'
+Plugin 'neomake/neomake'
 Plugin 'tomtom/tlib_vim'
 Plugin 'joonty/vdebug'
 Plugin 'MarcWeber/vim-addon-mw-utils'
@@ -144,37 +150,28 @@ map <Leader>c zA
 set completeopt-=preview
 set fillchars+=vert:\ 
 set hlsearch
-command! -complete=shellcmd -nargs=+ Shell call s:RunShellCommand(<q-args>)
-function! s:RunShellCommand(cmdline)
-    let isfirst = 1
-    let words = []
-    for word in split(a:cmdline)
-        if isfirst
-            let isfirst = 0  " don't change first word (shell command)
-        else
-            if word[0] =~ '\v[%#<]'
-                let word = expand(word)
-            endif
-            let word = shellescape(word, 1)
-        endif
-        call add(words, word)
-    endfor
-    let expanded_cmdline = join(words)
-    botright new
-    setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile nowrap
-    "call setline(1, 'You entered:  ' . a:cmdline)
-    call setline(1, expanded_cmdline)
-    call append(line('$'), substitute(getline(2), '.', '=', 'g'))
-    silent execute '$read !'. expanded_cmdline
-    1
+command! -complete=shellcmd -nargs=+ Shell call s:ExecuteInShell(<q-args>)
+function! s:ExecuteInShell(command)
+  let command = join(map(split(a:command), 'expand(v:val)'))
+  let winnr = bufwinnr('^' . command . '$')
+  silent! execute  winnr < 0 ? 'botright new ' . fnameescape(command) : winnr . 'wincmd w'
+  setlocal buftype=nowrite bufhidden=wipe nobuflisted noswapfile nowrap number
+  echo 'Execute ' . command . '...'
+  silent! execute 'silent %!'. command
+  silent! execute 'resize ' . line('$')
+  silent! redraw
+  silent! execute 'au BufUnload <buffer> execute bufwinnr(' . bufnr('#') . ') . ''wincmd w'''
+  silent! execute 'nnoremap <silent> <buffer> <LocalLeader>r :call <SID>ExecuteInShell(''' . command . ''')<CR>'
+  echo 'Shell command ' . command . ' executed.'
 endfunction
+command! -complete=shellcmd -nargs=+ Shell call s:ExecuteInShell(<q-args>)
 
 set autowriteall
 map <Leader>d :bdelete<CR>
-noremap <Up> <NOP>
-noremap <Down> <NOP>
-noremap <Left> <NOP>
-noremap <Right> <NOP>
+"noremap <Up> <NOP>
+"noremap <Down> <NOP>
+"noremap <Left> <NOP>
+"noremap <Right> <NOP>
 
 function! Doc()
     r~/.vim/templates/doc.tex
@@ -199,6 +196,7 @@ set clipboard=unnamed
 autocmd BufNewFile,BufRead *.md set filetype=markdown
 autocmd BufNewFile,BufRead *.hbs set filetype=html
 autocmd BufNewFile,BufRead *.py_in set filetype=python
+autocmd BufNewFile,BufRead *.ipynb set filetype=python
 autocmd BufNewFile,BufRead *.sql_in set filetype=sql
 nnoremap <Leader>p :CtrlP<CR>;wq
 nmap <Leader>n :set nu!<CR>
@@ -277,5 +275,8 @@ let g:airline_section_warning=''
 set noshowmode
 vnoremap . :normal .<CR>
 let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git\|build'
-":Shell pushd ~/incubator-madlib/build && make || popd <CR>
-nnoremap <Leader>m :!pushd ~/incubator-madlib/build && make \|\| popd<CR>
+nnoremap <Leader>mlm :Shell mlm<CR>
+nnoremap <Leader>mlt :execute system('source ~/test.sh')<CR>
+nnoremap <Leader>mlr :Shell mlr<CR>
+autocmd! BufWritePost * Neomake
+command! -nargs=* -complete=shellcmd R new | setlocal buftype=nofile bufhidden=hide noswapfile | r !<args>
