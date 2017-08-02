@@ -1,0 +1,3 @@
+std::stringstream debug;
+debug << "\ndebug:\n" << ;
+elog(INFO,"%s",debug.str().c_str());

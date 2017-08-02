@@ -10,7 +10,8 @@ syntax enable
 "Plugin 'python-mode/python-mode'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'skywind3000/asyncrun.vim'
-Plugin 'Chiel92/vim-autoformat'
+"Plugin 'Chiel92/vim-autoformat'
+"Plugin 'w0rp/ale'
 Plugin 'terryma/vim-multiple-cursors'
 Plugin 'JuliaLang/julia-vim'
 Plugin 'scrooloose/nerdcommenter'
@@ -20,12 +21,14 @@ Plugin 'othree/html5.vim'
 Plugin 'ervandew/supertab'
 Plugin 'joonty/vim-do'
 "Plugin 'scrooloose/syntastic'
+Plugin 'sbdchd/neoformat'
 Plugin 'neomake/neomake'
 Plugin 'tomtom/tlib_vim'
 Plugin 'joonty/vdebug'
 Plugin 'MarcWeber/vim-addon-mw-utils'
 Plugin 'easymotion/vim-easymotion'
 Plugin 'tpope/vim-fugitive'
+"Plugin 'tpope/vim-dispatch'
 Plugin 'tpope/vim-repeat'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
@@ -84,15 +87,14 @@ set viminfo='100,h
 set title
 " Ignore case when searching
 set ignorecase
-"
 " When searching try to be smart about cases
 set smartcase
 " Better tabing
 vnoremap < <gv
 vnoremap > >gv
-" For regular expressions turn magic on
 nnoremap > >>
 nnoremap < <<
+" For regular expressions turn magic on
 set magic
 " Show matching brackets when text indicator is over them
 set showmatch
@@ -139,43 +141,37 @@ map <Leader>O zR
 map <Leader>C zM
 map <Leader>o zA
 map <Leader>c zA
-"command -nargs=0 -bar Update if &modified
-"\|    if empty(bufname('%'))
-"\|        browse confirm write
-"\|    else
-"\|        confirm write
-"\|    endif
-"\|endif
-"nnoremap <silent> S :<C-u>Update<CR>
+
 set completeopt-=preview
-set fillchars+=vert:\ 
+set fillchars+=vert:\
 set hlsearch
 command! -complete=shellcmd -nargs=+ Shell call s:ExecuteInShell(<q-args>)
 function! s:ExecuteInShell(command)
-  let command = join(map(split(a:command), 'expand(v:val)'))
-  let winnr = bufwinnr('^' . command . '$')
-  silent! execute  winnr < 0 ? 'botright new ' . fnameescape(command) : winnr . 'wincmd w'
-  setlocal buftype=nowrite bufhidden=wipe nobuflisted noswapfile nowrap number
-  echo 'Execute ' . command . '...'
-  silent! execute 'silent %!'. command
-  silent! execute 'resize ' . line('$')
-  silent! redraw
-  silent! execute 'au BufUnload <buffer> execute bufwinnr(' . bufnr('#') . ') . ''wincmd w'''
-  silent! execute 'nnoremap <silent> <buffer> <LocalLeader>r :call <SID>ExecuteInShell(''' . command . ''')<CR>'
-  echo 'Shell command ' . command . ' executed.'
+    let command = join(map(split(a:command), 'expand(v:val)'))
+    let winnr = bufwinnr('^' . command . '$')
+    silent! execute  winnr < 0 ? 'botright new ' . fnameescape(command) : winnr . 'wincmd w'
+    setlocal buftype=nowrite bufhidden=wipe nobuflisted noswapfile nowrap number
+    echo 'Execute ' . command . '...'
+    silent! execute 'silent %!'. command
+    silent! execute 'resize ' . line('$')
+    silent! redraw
+    silent! execute 'au BufUnload <buffer> execute bufwinnr(' . bufnr('#') . ') . ''wincmd w'''
+    silent! execute 'nnoremap <silent> <buffer> <LocalLeader>r :call <SID>ExecuteInShell(''' . command . ''')<CR>'
+    echo 'Shell command ' . command . ' executed.'
 endfunction
 command! -complete=shellcmd -nargs=+ Shell call s:ExecuteInShell(<q-args>)
 
 set autowriteall
 map <Leader>d :bdelete<CR>
-"noremap <Up> <NOP>
-"noremap <Down> <NOP>
-"noremap <Left> <NOP>
-"noremap <Right> <NOP>
+noremap <Up> <NOP>
+noremap <Down> <NOP>
+noremap <Left> <NOP>
+noremap <Right> <NOP>
 
 function! Doc()
     r~/.vim/templates/doc.tex
 endfunction
+
 
 function! Html()
     r~/.vim/templates/doc.html
@@ -184,11 +180,13 @@ endfunction
 nmap <Leader>1 :call Doc()<CR>
 nmap <Leader>2 :call Html()<CR>
 nmap <Leader>3 :r~/.vim/templates/template.tex<CR>
+nmap <Leader>4 :r~/.vim/templates/debug.txt<CR>
 set tags=.tags;/
 nnoremap <silent> gt <C-]>
 nnoremap <silent> gb <C-T>
 nnoremap <Leader>t :Silent ctags -R --exclude=@/Users/csloan/.ctagsignore  -o ./.tags `pwd` <CR>
 set foldlevel=99
+
 "Silent commands
 command! -nargs=1 Silent execute ':silent !'.<q-args> | execute ':redraw!'
 
@@ -198,11 +196,13 @@ autocmd BufNewFile,BufRead *.hbs set filetype=html
 autocmd BufNewFile,BufRead *.py_in set filetype=python
 autocmd BufNewFile,BufRead *.ipynb set filetype=python
 autocmd BufNewFile,BufRead *.sql_in set filetype=sql
-nnoremap <Leader>p :CtrlP<CR>;wq
-nmap <Leader>n :set nu!<CR>
-au FileType yaml setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
 au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
 au BufNewFile,BufFilePre,BufRead *.jl set filetype=julia
+
+nnoremap <Leader>p :CtrlP<CR>;wq
+nmap <Leader>n :set nu! relativenumber!<CR>
+au FileType yaml setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
+
 autocmd TextChanged,TextChangedI <buffer> silent write
 
 nnoremap gs :Gstatus<CR>
@@ -269,14 +269,18 @@ let g:airline_section_c='%t'
 let g:airline_detect_modified=0
 let g:airline_section_error=''
 let g:airline_section_warning=''
-"set statusline+=%#warningmsg#
-"set statusline+=%{SyntasticStatuslineFlag()}
-"set statusline+=%*
+
 set noshowmode
 vnoremap . :normal .<CR>
 let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git\|build'
 nnoremap <Leader>mlm :Shell mlm<CR>
 nnoremap <Leader>mlt :execute system('source ~/test.sh')<CR>
 nnoremap <Leader>mlr :Shell mlr<CR>
-autocmd! BufWritePost * Neomake
+nnoremap <Leader>mli :Shell mli<CR>
+"autocmd! BufWritePost * Neomake
 command! -nargs=* -complete=shellcmd R new | setlocal buftype=nofile bufhidden=hide noswapfile | r !<args>
+if @% == ""
+    :silent edit ~/a.txt
+endif
+let g:ctrlp_working_path_mode=0
+let g:neomake_cpp_enabled_markers=['clang']
