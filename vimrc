@@ -42,12 +42,12 @@ Plugin 'alvan/vim-closetag'
 Plugin 'bronson/vim-trailing-whitespace'
 Plugin 'mileszs/ack.vim'
 Plugin 'mtth/scratch.vim'
-Plugin 'pangloss/vim-javascript'
-Plugin 'mxw/vim-jsx'
 Plugin 'raimondi/delimitmate'
 Plugin 'wikitopian/hardmode'
+Plugin 'pangloss/vim-javascript'
+Plugin 'maxmellon/vim-jsx-pretty'
 " Always show powerline
-set relativenumber
+"set relativenumber
 call vundle#end()            " required
 filetype plugin indent on    " required
 set laststatus=2
@@ -184,7 +184,7 @@ nmap <Leader>4 :r~/.vim/templates/debug.txt<CR>
 set tags=.tags;/
 nnoremap <silent> gt <C-]>
 nnoremap <silent> gb <C-T>
-nnoremap <Leader>t :Silent ctags -R --exclude=@/Users/csloan/.ctagsignore  -o ./.tags `pwd` <CR>
+nnoremap <Leader>t :Silent ctags -R --exclude=@/Users/Cooper/.ctagsignore  -o ./.tags `pwd` <CR>
 set foldlevel=99
 
 "Silent commands
@@ -231,19 +231,19 @@ function! NERDTreeQuit()
     endif
 endfunction
 autocmd WinEnter * call NERDTreeQuit()
-let g:closetag_filenames = "*.html,*.xml,*.hbs"
+let g:closetag_filenames = "*.html,*.xml,*.hbs,*.js"
 if executable('ag')
     let g:ackprg = 'ag --vimgrep'
 endif
 nnoremap <Leader>a :Ack! 
 nnoremap <Leader>i mzgg=G`z
+nnoremap <C-H> <C-W><C-H>
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
-nnoremap <C-H> <C-W><C-H>
 set splitbelow
 set splitright
-let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
+"let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
 let vimDir = '$HOME/.vim'
 let &runtimepath.=','.vimDir
 
@@ -257,7 +257,6 @@ if has('persistent_undo')
     set undofile
 endif
 
-let g:jsx_ext_required = 0
 let g:airline_theme='distinguished'
 let g:airline_powerline_fonts = 0
 let g:airline_left_sep = ''
@@ -284,3 +283,4 @@ if @% == ""
 endif
 let g:ctrlp_working_path_mode=0
 let g:neomake_cpp_enabled_markers=['clang']
+let g:jsx_ext_required = 0
