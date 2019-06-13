@@ -1,0 +1,9 @@
+    std::cout << "depthEstimatorInput.field = ";
+    std::cout << "{";
+    for(int i = 0; i<input_.field.size(); i++){
+      std::cout << input_.field[i];
+      if (i < input_.field.size()-1){
+          std::cout << ", ";
+      }
+    }
+    std::cout << "};\n";

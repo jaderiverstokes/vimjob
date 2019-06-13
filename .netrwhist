@@ -1,3 +1,9 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =1
+let g:netrw_dirhist_cnt =7
 let g:netrw_dirhist_1='/Users/pivotal'
+let g:netrw_dirhist_2='/home/csloan/driving'
+let g:netrw_dirhist_3='/home/csloan/driving/vehicle/perception/learning/deepvma'
+let g:netrw_dirhist_4='/mnt/sun-pcp01/rdeepvma/cooper/vision_extents_label_v3'
+let g:netrw_dirhist_5='/mnt/sun-pcp01/rdeepvma/cooper'
+let g:netrw_dirhist_6='/mnt/sun-pcp01/rdeepvma/cooper/v20'
+let g:netrw_dirhist_7='/home/csloan/driving/vehicle/perception/learning/deepvma'

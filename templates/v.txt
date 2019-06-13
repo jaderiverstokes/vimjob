@@ -1,0 +1,4 @@
+LOG(ERROR) << "v: ";
+for (int i=0; i<v.size();i++){
+  LOG(ERROR) << v[i] << ", ";
+}
