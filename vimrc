@@ -7,25 +7,20 @@ let $BASH_ENV = "~/.bash_aliases"
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 syntax enable
-"Plugin 'python-mode/python-mode'
+
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'skywind3000/asyncrun.vim'
 Plugin 'prabirshrestha/async.vim'
-"Plugin 'Chiel92/vim-autoformat'
-"Plugin 'w0rp/ale'
 Plugin 'terryma/vim-multiple-cursors'
 Plugin 'JuliaLang/julia-vim'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'scrooloose/nerdtree'
 Plugin 'tmhedberg/SimpylFold'
 Plugin 'othree/html5.vim'
-"Plugin 'ervandew/supertab'
 Plugin 'joonty/vim-do'
-"Plugin 'scrooloose/syntastic'
 Plugin 'sbdchd/neoformat'
 Plugin 'neomake/neomake'
 Plugin 'tomtom/tlib_vim'
-"Plugin 'joonty/vdebug'
 Plugin 'tpope/vim-rhubarb'
 Plugin 'MarcWeber/vim-addon-mw-utils'
 Plugin 'easymotion/vim-easymotion'
@@ -51,10 +46,11 @@ Plugin 'pangloss/vim-javascript'
 Plugin 'maxmellon/vim-jsx-pretty'
 Plugin 'heavenshell/vim-pydocstring'
 Plugin 'navicore/vissort.vim'
-" Always show powerline
+
 set relativenumber
 call vundle#end()            " required
 filetype plugin indent on    " required
+
 set laststatus=2
 set clipboard=unnamed
 let mapleader = "\<Space>"
@@ -70,7 +66,6 @@ imap kj <Esc>
 imap KJ <Esc>
 imap Kj <Esc>
 imap kJ <Esc>
-"vmap jk <Esc>
 set backspace=2
 
 "colorscheme blackboard
@@ -136,6 +131,7 @@ set number
 set visualbell
 set t_vb=
 
+
 nnoremap <Leader>x :NERDTreeFocus <CR>
 nmap s <Plug>(easymotion-overwin-f2)
 nnoremap <Leader>f :bnext<CR>
@@ -147,10 +143,12 @@ nnoremap <Leader>s :wa<CR>
 map <Leader>O zR
 map <Leader>C zM
 map <Leader>o zA
-map <Leader>c zA
+map <Leader>h :CtrlPCurWD<CR>
 nnoremap <Leader>b :Pydocstring<CR>
+map <Leader>d :bdelete<CR>
+
 " Replace word under cursor
-nnoremap <Leader>R :%s/\<<C-r><C-w>\>/lidar_<C-r><C-w>/gc
+nnoremap <Leader>R :%s/\<<C-r><C-w>\>/<C-r><C-w>/gc
 
 set completeopt-=preview
 set fillchars+=vert:\ 
@@ -179,7 +177,6 @@ endfunction
 command! -complete=shellcmd -nargs=+ Shell call s:ExecuteInShell(<q-args>)
 
 set autowriteall
-map <Leader>d :bdelete<CR>
 noremap <Up> <NOP>
 noremap <Down> <NOP>
 noremap <Left> <NOP>
@@ -202,6 +199,7 @@ nmap <Leader>5 :r~/.vim/templates/tf.txt<CR>
 nmap <Leader>6 :r~/.vim/templates/v.txt<CR>
 nmap <Leader>7 :r~/.vim/templates/array.txt<CR>
 nmap <Leader>8 :r~/.vim/templates/log.txt<CR>
+
 set tags=.tags;/
 nnoremap <silent> gt <C-]>
 nnoremap <silent> gb <C-T>
@@ -212,6 +210,7 @@ set foldlevel=99
 command! -nargs=1 Silent execute ':silent !'.<q-args> | execute ':redraw!'
 
 autocmd BufNewFile,BufRead *.md set filetype=markdown
+autocmd BufNewFile,BufRead *.launch set filetype=html
 autocmd BufNewFile,BufRead *.ts set filetype=javascript
 autocmd BufNewFile,BufRead *.hbs set filetype=html
 autocmd BufNewFile,BufRead *.vue set filetype=html
@@ -224,7 +223,7 @@ au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
 au BufNewFile,BufFilePre,BufRead *.jl set filetype=julia
 
 nnoremap <Leader>p :CtrlP<CR>;wq
-nmap <Leader>n :set nonu norelativenumber<CR>
+nmap <Leader>n :set nonu norelativenumber<CR>:GitGutterDisable<CR>
 au FileType yaml setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
 
 autocmd TextChanged,TextChangedI <buffer> silent write
@@ -232,6 +231,7 @@ autocmd TextChanged,TextChangedI <buffer> silent write
 nnoremap gs :Gstatus<CR>
 nnoremap gc :Gcommit<CR>
 nnoremap <Leader>y :TagbarOpenAutoClose<CR>
+
 function! NERDTreeQuit()
     redir => buffersoutput
     silent buffers
@@ -256,9 +256,6 @@ function! NERDTreeQuit()
 endfunction
 autocmd WinEnter * call NERDTreeQuit()
 let g:closetag_filenames = "*.html,*.xml,*.hbs,*.js"
-"if executable('ag')
-    "let g:ackprg = 'ag --vimgrep'
-"endif
 "
 let g:ack_use_async = 1
 let g:ack_use_dispatch = 1
@@ -266,7 +263,8 @@ if exists('$TMUX')
     let g:ack_use_dispatch = 0
     let g:ack_use_async = 0
 endif
-let g:ackprg = 'ack-grep'
+"let g:ackprg = 'ack-grep'
+let g:ackprg = "ag --ignore '*.js.map' --ignore '*.js' --ignore=\"*node_modules/\" --nogroup --nocolor --column --path-to-agignore ~/.agignore"
 nnoremap <Leader>a :Ack! 
 nnoremap <Leader>e "zyiw:Ack! <C-R>z<CR>
 nnoremap <Leader>i mzgg=G`z
@@ -304,12 +302,6 @@ let g:airline_section_warning=''
 
 set noshowmode
 vnoremap . :normal .<CR>
-nnoremap <Leader>mlm :Shell mlm<CR>
-"nnoremap <Leader>mlt :execute system('source ~/test.sh')<CR>
-nnoremap <Leader>mlt :Shell  bazel run //vehicle/perception/learning/deepvma/generate_dataset:radar_observation_cloud_generator_test<CR>
-nnoremap <Leader>mlr :Shell mlr<CR>
-nnoremap <Leader>mli :Shell mli<CR>
-"autocmd! BufWritePost * Neomake
 command! -nargs=* -complete=shellcmd R new | setlocal buftype=nofile bufhidden=hide noswapfile | r !<args>
 if @% == ""
     :silent edit .
@@ -321,7 +313,6 @@ let g:jsx_ext_required = 0
 let g:ctrlp_max_depth = 30
 let g:ctrlp_max_files = 0
 let NERDTreeShowBookmarks = 1
-"let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git\|build\|log_tests\|third_party\|infra\|experimental'
 let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git\|build\|log_tests\|infra\|experimental'
 
 let g:ycm_global_ycm_extra_conf='~/.ycm_extra_conf.py'
@@ -382,7 +373,7 @@ function! SwitchSourceHeader()
  " see :help expand.
  let l:cur_ext=expand("%:e")
  " See if we have a source file (ending in .cpp or .cc).
- if (expand ("%:e") == "cpp" || expand ("%:e") == "cc")
+ if (expand ("%:e") == "cpp" || expand ("%:e") == "cc"|| expand ("%:e") == "cu.cpp")
    " %:t gives the basename with extension, :r trims the extension.
    " Try searching for both .h and .hpp extensions, and open the first file
    " that is found.
@@ -441,3 +432,29 @@ endfunction
 command -nargs=* Bazel :call BazelCmd(<f-args>)
 set modelines=0
 set nomodeline
+set autoread
+au CursorHold * checktime
+
+" copy to attached terminal using the yank(1) script:
+" https://github.com/sunaku/home/blob/master/bin/yank
+"function! Yank(text) abort
+  "let escape = system('yank', a:text)
+  "if v:shell_error
+    "echoerr escape
+  "else
+    "call writefile([escape], '/dev/tty', 'b')
+  "endif
+"endfunction
+"noremap <silent> <Leader>y y:<C-U>call Yank(@0)<CR>
+
+
+function! NERDTreeYankCurrentNode()
+    let n = g:NERDTreeFileNode.GetSelected()
+    if n != {}
+        call setreg('"', n.path.str())
+    endif
+endfunction
+
+set copyindent
+let g:ycm_confirm_extra_conf = 0
+let NERDTreeIgnore = ['__pycache__$']
