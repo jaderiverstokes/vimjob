@@ -8,8 +8,8 @@ import os
 import subprocess
 import vim
 
-USE_AUTOPEP8 = False
-USE_YAPF = True
+USE_AUTOPEP8 = True
+USE_YAPF = False
 
 
 def main():
