@@ -8,6 +8,8 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 syntax enable
 
+Plugin 'dkprice/vim-easygrep'
+Plugin 'tpope/vim-abolish'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'skywind3000/asyncrun.vim'
 Plugin 'prabirshrestha/async.vim'
@@ -46,6 +48,9 @@ Plugin 'pangloss/vim-javascript'
 Plugin 'maxmellon/vim-jsx-pretty'
 Plugin 'heavenshell/vim-pydocstring'
 Plugin 'navicore/vissort.vim'
+Plugin 'tpope/vim-tbone'
+Plugin 'tell-k/vim-autoflake'
+Plugin 'junegunn/fzf'
 
 set relativenumber
 call vundle#end()            " required
@@ -133,6 +138,7 @@ set t_vb=
 
 
 nnoremap <Leader>x :NERDTreeFocus <CR>
+nnoremap <Leader>z :NERDTreeFind <CR>
 nmap s <Plug>(easymotion-overwin-f2)
 nnoremap <Leader>f :bnext<CR>
 nnoremap <Leader>w <C-w>c
@@ -143,12 +149,13 @@ nnoremap <Leader>s :wa<CR>
 map <Leader>O zR
 map <Leader>C zM
 map <Leader>o zA
-map <Leader>h :CtrlPCurWD<CR>
+map <Leader>h :CtrlP vehicle/perception/learning/safetynet<CR>
 nnoremap <Leader>b :Pydocstring<CR>
 map <Leader>d :bdelete<CR>
 
 " Replace word under cursor
 nnoremap <Leader>R :%s/\<<C-r><C-w>\>/<C-r><C-w>/gc
+vnoremap <Leader>R :%s/\<<C-r><C-w>\>/<C-r><C-w>/gc
 
 set completeopt-=preview
 set fillchars+=vert:\ 
@@ -177,10 +184,10 @@ endfunction
 command! -complete=shellcmd -nargs=+ Shell call s:ExecuteInShell(<q-args>)
 
 set autowriteall
-noremap <Up> <NOP>
-noremap <Down> <NOP>
-noremap <Left> <NOP>
-noremap <Right> <NOP>
+"noremap <Up> <NOP>
+"noremap <Down> <NOP>
+"noremap <Left> <NOP>
+"noremap <Right> <NOP>
 
 function! Doc()
     r~/.vim/templates/doc.tex
@@ -191,9 +198,9 @@ function! Html()
     r~/.vim/templates/doc.html
 endfunction
 
-nmap <Leader>1 :call Doc()<CR>
-nmap <Leader>2 :call Html()<CR>
-nmap <Leader>3 :r~/.vim/templates/template.tex<CR>
+nmap <Leader>1 :r~/.vim/templates/python.txt<CR>
+nmap <Leader>2 :r~/.vim/templates/cpp.txt<CR>
+nmap <Leader>3 :r~/.vim/templates/bazel.txt<CR>
 nmap <Leader>4 :r~/.vim/templates/debug.txt<CR>
 nmap <Leader>5 :r~/.vim/templates/tf.txt<CR>
 nmap <Leader>6 :r~/.vim/templates/v.txt<CR>
@@ -264,7 +271,7 @@ if exists('$TMUX')
     let g:ack_use_async = 0
 endif
 "let g:ackprg = 'ack-grep'
-let g:ackprg = "ag --ignore '*.js.map' --ignore '*.js' --ignore=\"*node_modules/\" --nogroup --nocolor --column --path-to-agignore ~/.agignore"
+let g:ackprg = "ag --ignore '*.css' --ignore '*.ipynb' --ignore '*.js.map' --ignore '*.js' --ignore=\"*node_modules/\" --nogroup --nocolor --column --path-to-agignore ~/.agignore"
 nnoremap <Leader>a :Ack! 
 nnoremap <Leader>e "zyiw:Ack! <C-R>z<CR>
 nnoremap <Leader>i mzgg=G`z
@@ -313,7 +320,8 @@ let g:jsx_ext_required = 0
 let g:ctrlp_max_depth = 30
 let g:ctrlp_max_files = 0
 let NERDTreeShowBookmarks = 1
-let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git\|build\|log_tests\|infra\|experimental'
+"let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git\|build\|log_tests\|infra\|experimental'
+let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git\|log_tests\|infra\|experimental'
 
 let g:ycm_global_ycm_extra_conf='~/.ycm_extra_conf.py'
 let g:ycm_collect_identifiers_from_tags_files=1
@@ -458,3 +466,66 @@ endfunction
 set copyindent
 let g:ycm_confirm_extra_conf = 0
 let NERDTreeIgnore = ['__pycache__$']
+
+
+function! DoInsertHeader(filename) abort
+  let search_flags = "bnW" " backwards, don't move cursor, no wrap
+  let include_line = "#include \"" . a:filename . "\""
+  if search("^" . include_line, search_flags) != 0
+    return
+  endif
+
+  let last_include_line = search("^#include ", search_flags)
+  " We want to include only after angle bracket includes. To
+  " guarantee this, we replace "<" with "!" which lets the
+  " ascii sorting order take care of the include sorting
+  while (substitute(getline(last_include_line), "<", "!", "") > include_line)
+    let last_include_line = last_include_line - 1
+  endwhile
+  call append(last_include_line, [include_line])
+endfunction
+function! DoInsertHeader(filename) abort
+  let search_flags = "bnW" " backwards, don't move cursor, no wrap
+  let include_line = "#include \"" . a:filename . "\""
+  if search("^" . include_line, search_flags) != 0
+    return
+  endif
+
+  let last_include_line = search("^#include ", search_flags)
+  " We want to include only after angle bracket includes. To
+  " guarantee this, we replace "<" with "!" which lets the
+  " ascii sorting order take care of the include sorting
+  while (substitute(getline(last_include_line), "<", "!", "") > include_line)
+    let last_include_line = last_include_line - 1
+  endwhile
+  call append(last_include_line, [include_line])
+endfunction
+
+
+" Get header options for tag under the cursor. This
+" function has a strange signature because it is not
+" meant to be called directly and should be used as
+" a completion function instead
+function! GetIncludeFiles(arglead, line, pos) abort
+  " Using match-case enables binary searching for tags
+  " and also provides more accurate results for headers.
+  let tagcase_tmp = &l:tagcase
+  let &l:tagcase = "match"
+  let tag_regex = "^" . expand("<cword>") . "$"
+  let filename = expand("%")
+
+  let tags = taglist(tag_regex, filename)
+  let files1 = filter(tags, {idx, val -> val.filename =~ '.h$'})
+  let files2 = map(files1, {idx, val -> val.filename})
+
+  let &l:tagcase = tagcase_tmp
+  return uniq(files2)
+endfunction
+
+
+" Insert include file for tag under the cursor
+"set wildcharm=<C-x>
+command! -nargs=1 -complete=customlist,GetIncludeFiles InsertHeader
+      \ :call DoInsertHeader(<f-args>)
+let g:autoflake_remove_all_unused_imports=1
+let g:autoflake_disable_show_diff=1

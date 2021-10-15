@@ -1,0 +1,20 @@
+import argparse
+import os
+import sys
+
+def parse_args(argv):
+    parser = argparse.ArgumentParser(__doc__)
+    parser.add_argument(
+        '--arg',
+        type=str,
+        help=('Argument'),
+        default='def_arg',
+    )
+    return parser.parse_args(argv)
+
+def main(argv=sys.argv[1:]):
+    args = parse_args(argv)
+
+if __name__ == "__main__":
+    main()
+

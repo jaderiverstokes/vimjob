@@ -1,0 +1,7 @@
+cc_library_if_cuda(
+    name = "file",
+    srcs = ["file.cpp"],
+    hdrs = ["file.h"],
+    deps = [
+    ],
+)

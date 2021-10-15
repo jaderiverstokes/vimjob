@@ -1,1 +1,1 @@
-        x = tf.Print(x, [tf.shape(x), x], message="x: ")
+        x = tf.Print(x, [tf.shape(x), x], message="x: ", summarize=10)
