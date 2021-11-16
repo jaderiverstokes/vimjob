@@ -9,6 +9,7 @@ call plug#begin('~/.vim/plugged')
 Plug 'lfilho/cosco.vim'
 Plug 'neoclide/coc-tsserver'
 Plug 'neoclide/coc.nvim'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'dkprice/vim-easygrep'
 Plug 'tpope/vim-abolish'
 Plug 'ctrlpvim/ctrlp.vim'
