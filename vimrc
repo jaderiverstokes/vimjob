@@ -6,9 +6,13 @@ let $BASH_ENV = "~/.bash_aliases"
 syntax enable
 
 call plug#begin('~/.vim/plugged')
+" post install (yarn install | npm install) then load plugin only for editing supported files
+Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
 Plug 'lfilho/cosco.vim'
+Plug 'ervandew/supertab'
 Plug 'neoclide/coc-tsserver'
 Plug 'neoclide/coc.nvim'
+Plug 'neoclide/coc-pairs.nvim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'dkprice/vim-easygrep'
 Plug 'tpope/vim-abolish'
@@ -22,7 +26,7 @@ Plug 'scrooloose/nerdtree'
 Plug 'tmhedberg/SimpylFold'
 Plug 'othree/html5.vim'
 Plug 'joonty/vim-do'
-Plug 'sbdchd/neoformat'
+"Plug 'sbdchd/neoformat'
 Plug 'neomake/neomake'
 Plug 'tomtom/tlib_vim'
 Plug 'tpope/vim-rhubarb'
@@ -33,24 +37,27 @@ Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-repeat'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'bpeebles/wells-colorscheme.vim'
+"Plug 'bpeebles/wells-colorscheme.vim'
 Plug 'tpope/vim-surround'
 Plug 'airblade/vim-gitgutter'
-Plug 'flazz/vim-colorschemes'
+"Plug 'flazz/vim-colorschemes'
 Plug 'cooper-sloan/tagbar'
 Plug 'alvan/vim-closetag'
 Plug 'bronson/vim-trailing-whitespace'
 Plug 'mileszs/ack.vim'
 Plug 'mtth/scratch.vim'
-Plug 'raimondi/delimitmate'
+Plug 'altercation/vim-colors-solarized'
+"Plug 'raimondi/delimitmate'
 Plug 'wikitopian/hardmode'
 Plug 'pangloss/vim-javascript'
 Plug 'maxmellon/vim-jsx-pretty'
 Plug 'heavenshell/vim-pydocstring'
 Plug 'navicore/vissort.vim'
 Plug 'tpope/vim-tbone'
+Plug 'leafgarland/typescript-vim'
 Plug 'tell-k/vim-autoflake'
 Plug 'junegunn/fzf'
+Plug 'pantharshit00/vim-prisma'
 call plug#end()
 
 set relativenumber
@@ -73,12 +80,19 @@ imap Kj <Esc>
 imap kJ <Esc>
 set backspace=2
 
+syntax enable
+let g:solarized_termcolors=256
+set background=light
+"set background=dark
+colorscheme solarized
+"colorscheme solarized
 "colorscheme blackboard
 "colorscheme PaperColor
 "colorscheme Atelier_ForestDar
-colorscheme gruvbox
+"colorscheme gruvbox
 
 "colorscheme Tomorrow-Night
+"colorscheme solarized
 
 
 set dictionary="/usr/dict/words"
@@ -107,7 +121,6 @@ set showmatch
 " How many tenths of a second to blink when matching brackets
 set mat=2
 
-set background=dark
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Files, backups and undo
@@ -149,7 +162,9 @@ nnoremap <Leader>s :wa<CR>
 map <Leader>O zR
 map <Leader>C zM
 map <Leader>o zA
-map <Leader>h :CtrlP vehicle/perception/learning/safetynet<CR>
+"map <Leader>h :FZF<CR>
+"map <Leader>h :FZF ~/fin-web-client<CR>
+"map <Leader>hs :FZF ~/fin-server<CR>
 nnoremap <Leader>b :Pydocstring<CR>
 map <Leader>d :bdelete<CR>
 
@@ -175,7 +190,7 @@ function! s:ExecuteInShell(command)
     silent! execute 'g/development/0,.d'
     silent! execute '%s///g'
     silent! execute '%s///g'
-    silent! execute '%s/\[\d\{-}m//g'
+silent! execute '%s/\[\d\{-}m//g'
     silent! execute 'resize ' . line('$')
     silent! redraw
     silent! execute "normal! zb"
@@ -207,10 +222,6 @@ nmap <Leader>6 :r~/.vim/templates/v.txt<CR>
 nmap <Leader>7 :r~/.vim/templates/array.txt<CR>
 nmap <Leader>8 :r~/.vim/templates/log.txt<CR>
 
-set tags=.tags;/
-nnoremap <silent> gt <C-]>
-nnoremap <silent> gb <C-T>
-nnoremap <Leader>t :Silent ctags -R --exclude=@/home/csloan/.ctagsignore  -o ./.tags `pwd` <CR>
 set foldlevel=99
 
 "Silent commands
@@ -218,7 +229,10 @@ command! -nargs=1 Silent execute ':silent !'.<q-args> | execute ':redraw!'
 
 autocmd BufNewFile,BufRead *.md set filetype=markdown
 autocmd BufNewFile,BufRead *.launch set filetype=html
-autocmd BufNewFile,BufRead *.ts set filetype=javascript
+autocmd BufNewFile,BufRead *.ts set filetype=typescript
+"autocmd BufNewFile,BufRead *.tsx set filetype=typescript
+autocmd BufNewFile,BufRead *.tsx set filetype=typescriptreact
+autocmd BufNewFile,BufRead *.jsx set filetype=javascript
 autocmd BufNewFile,BufRead *.hbs set filetype=html
 autocmd BufNewFile,BufRead *.vue set filetype=html
 autocmd BufNewFile,BufRead *.py_in set filetype=python
@@ -229,7 +243,7 @@ autocmd BufNewFile,BufRead *.cu.cc set filetype=cpp
 au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
 au BufNewFile,BufFilePre,BufRead *.jl set filetype=julia
 
-nnoremap <Leader>p :CtrlP<CR>;wq
+nnoremap <Leader>p :FZF<CR>
 nmap <Leader>n :set nonu norelativenumber<CR>:GitGutterDisable<CR>
 au FileType yaml setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
 
@@ -271,7 +285,7 @@ if exists('$TMUX')
     let g:ack_use_async = 0
 endif
 "let g:ackprg = 'ack-grep'
-let g:ackprg = "ag --ignore '*.css' --ignore '*.ipynb' --ignore '*.js.map' --ignore '*.js' --ignore=\"*node_modules/\" --nogroup --nocolor --column --path-to-agignore ~/.agignore"
+let g:ackprg = "ag --ignore '*.css' --ignore=\"*node_modules/\" --nogroup --nocolor --column --path-to-ignore ~/.agignore"
 nnoremap <Leader>a :Ack! 
 nnoremap <Leader>e "zyiw:Ack! <C-R>z<CR>
 nnoremap <Leader>i mzgg=G`z
@@ -333,32 +347,6 @@ let g:ctrlp_clear_cache_on_exit = 0
 set foldmethod=syntax
 let g:github_enterprise_urls = ['https://git.zooxlabs.com']
 
-" Type `gd` to go to the BUILD file for this file.
-function! GoToBuild()
-python3 << EOF
-import vim
-import os.path
-
-def look_above(filepath):
- dirpath, _, basename = fn.rpartition('/')
- buildfile = os.path.join(dirpath, 'BUILD')
- return os.path.exists(buildfile), buildfile, dirpath
-
-try:
- fn = vim.current.buffer.name
- _, _, basename = fn.rpartition('/')
- while fn:
-   exists, buildfile, fn = look_above(fn)
-   if exists:
-     print("found!!!",buildfile)
-     vim.command('edit ' + buildfile)
-     vim.command('call search("\\"' + basename + '\\"")')
-     break
-except Exception as e:
-  print("Something went wrong: " + str(e))
-EOF
-endfunction
-nnoremap gd :call GoToBuild()<cr>
 
 " Create a function to reload vimrc. Checks if it already exists to avoid
 " redefining the function during the function call.
@@ -529,3 +517,30 @@ command! -nargs=1 -complete=customlist,GetIncludeFiles InsertHeader
       \ :call DoInsertHeader(<f-args>)
 let g:autoflake_remove_all_unused_imports=1
 let g:autoflake_disable_show_diff=1
+
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gt <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" use <tab> for trigger completion and navigate to the next complete item
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
+"let g:neoformat_only_msg_on_error = 1
+autocmd BufWritePre *.js PrettierAsync
+autocmd BufWritePre *.ts PrettierAsync
+autocmd BufWritePre *.tsx PrettierAsync
+autocmd BufWritePre *.jsx PrettierAsync
+"command  
+"function! s:SomeFunc(command)
+"endfunction
+    "Gdiffsplit(command)
+"command! -nargs=* Gdiff :call SomeFunc(<q-args>)
+
+
+set diffopt+=vertical
+
+tnoremap <expr> <Esc> (&filetype == "fzf") ? "<Esc>" : "<c-\><c-n>"
