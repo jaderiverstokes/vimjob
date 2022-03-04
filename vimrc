@@ -84,7 +84,7 @@ syntax enable
 let g:solarized_termcolors=256
 set background=light
 "set background=dark
-colorscheme solarized
+colorscheme monokai
 "colorscheme solarized
 "colorscheme blackboard
 "colorscheme PaperColor
@@ -186,7 +186,8 @@ function! s:ExecuteInShell(command)
     silent! execute 'silent %!'. command
     silent! execute 'au BufUnload <buffer> execute bufwinnr(' . bufnr('#') . ') . ''wincmd w'''
     silent! execute 'nnoremap <silent> <buffer> <LocalLeader>r :call <SID>ExecuteInShell(''' . command . ''')<CR>'
-    silent! execute '%s/$//g'
+    silent! execute '%s/
+$//g'
     silent! execute 'g/development/0,.d'
     silent! execute '%s///g'
     silent! execute '%s///g'
