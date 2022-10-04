@@ -1,6 +1,7 @@
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
+
 let $BASH_ENV = "~/.bash_aliases"
 
 syntax enable
@@ -8,6 +9,7 @@ syntax enable
 call plug#begin('~/.vim/plugged')
 " post install (yarn install | npm install) then load plugin only for editing supported files
 Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
+Plug 'tomlion/vim-solidity'
 Plug 'lfilho/cosco.vim'
 Plug 'ervandew/supertab'
 Plug 'neoclide/coc-tsserver'
@@ -40,7 +42,7 @@ Plug 'vim-airline/vim-airline-themes'
 "Plug 'bpeebles/wells-colorscheme.vim'
 Plug 'tpope/vim-surround'
 Plug 'airblade/vim-gitgutter'
-"Plug 'flazz/vim-colorschemes'
+Plug 'flazz/vim-colorschemes'
 Plug 'cooper-sloan/tagbar'
 Plug 'alvan/vim-closetag'
 Plug 'bronson/vim-trailing-whitespace'
@@ -84,8 +86,8 @@ syntax enable
 let g:solarized_termcolors=256
 set background=light
 "set background=dark
-colorscheme monokai
-"colorscheme solarized
+"colorscheme monokai
+colorscheme solarized
 "colorscheme blackboard
 "colorscheme PaperColor
 "colorscheme Atelier_ForestDar
@@ -545,3 +547,4 @@ autocmd BufWritePre *.jsx PrettierAsync
 set diffopt+=vertical
 
 tnoremap <expr> <Esc> (&filetype == "fzf") ? "<Esc>" : "<c-\><c-n>"
+let g:SuperTabDefaultCompletionType = "<c-n>"

@@ -1,5 +1,5 @@
-"nnoremap <silent> <Leader>r :wa<CR>: Shell python %<CR>
-nnoremap <silent> <Leader>r :wa<CR>:terminal bazel run --config cuda /%:p:h:s?\/home??:s?\/driving??:s?\/csloan??:%:t:r<CR>
+nnoremap <silent> <Leader>r :wa<CR>: Shell python3 %<CR>
+"nnoremap <silent> <Leader>r :wa<CR>:terminal bazel run --config cuda /%:p:h:s?\/home??:s?\/driving??:s?\/csloan??:%:t:r<CR>
 "augroup fmt
   "autocmd!
   "autocmd BufWritePre * Neoformat
