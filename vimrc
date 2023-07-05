@@ -16,19 +16,19 @@ Plug 'neoclide/coc-tsserver'
 Plug 'neoclide/coc.nvim'
 Plug 'neoclide/coc-pairs.nvim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'dkprice/vim-easygrep'
+"Plug 'dkprice/vim-easygrep'
 Plug 'tpope/vim-abolish'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'skywind3000/asyncrun.vim'
 Plug 'prabirshrestha/async.vim'
 Plug 'terryma/vim-multiple-cursors'
-Plug 'JuliaLang/julia-vim'
+"Plug 'JuliaLang/julia-vim'
 Plug 'scrooloose/nerdcommenter'
 Plug 'scrooloose/nerdtree'
 Plug 'tmhedberg/SimpylFold'
 Plug 'othree/html5.vim'
 Plug 'joonty/vim-do'
-"Plug 'sbdchd/neoformat'
+Plug 'sbdchd/neoformat'
 Plug 'neomake/neomake'
 Plug 'tomtom/tlib_vim'
 Plug 'tpope/vim-rhubarb'
@@ -47,19 +47,22 @@ Plug 'cooper-sloan/tagbar'
 Plug 'alvan/vim-closetag'
 Plug 'bronson/vim-trailing-whitespace'
 Plug 'mileszs/ack.vim'
-Plug 'mtth/scratch.vim'
+"Plug 'mtth/scratch.vim'
 Plug 'altercation/vim-colors-solarized'
 "Plug 'raimondi/delimitmate'
 Plug 'wikitopian/hardmode'
 Plug 'pangloss/vim-javascript'
 Plug 'maxmellon/vim-jsx-pretty'
-Plug 'heavenshell/vim-pydocstring'
+"Plug 'heavenshell/vim-pydocstring'
 Plug 'navicore/vissort.vim'
 Plug 'tpope/vim-tbone'
 Plug 'leafgarland/typescript-vim'
 Plug 'tell-k/vim-autoflake'
 Plug 'junegunn/fzf'
 Plug 'pantharshit00/vim-prisma'
+Plug 'jpalardy/vim-slime'
+Plug 'github/copilot.vim'
+Plug 'instant-markdown/vim-instant-markdown', {'for': 'markdown', 'do': 'yarn install'}
 call plug#end()
 
 set relativenumber
@@ -167,8 +170,9 @@ map <Leader>o zA
 "map <Leader>h :FZF<CR>
 "map <Leader>h :FZF ~/fin-web-client<CR>
 "map <Leader>hs :FZF ~/fin-server<CR>
-nnoremap <Leader>b :Pydocstring<CR>
+"nnoremap <Leader>b :Pydocstring<CR>
 map <Leader>d :bdelete<CR>
+map <Leader>c :terminal! open -a Safari https://github.com/spanninglabs/learning/pulls; open -a Safari https://github.com/spanninglabs/teachmehow/pulls<CR>
 
 " Replace word under cursor
 nnoremap <Leader>R :%s/\<<C-r><C-w>\>/<C-r><C-w>/gc
@@ -217,13 +221,28 @@ function! Html()
 endfunction
 
 nmap <Leader>1 :r~/.vim/templates/python.txt<CR>
-nmap <Leader>2 :r~/.vim/templates/cpp.txt<CR>
 nmap <Leader>3 :r~/.vim/templates/bazel.txt<CR>
 nmap <Leader>4 :r~/.vim/templates/debug.txt<CR>
 nmap <Leader>5 :r~/.vim/templates/tf.txt<CR>
 nmap <Leader>6 :r~/.vim/templates/v.txt<CR>
 nmap <Leader>7 :r~/.vim/templates/array.txt<CR>
-nmap <Leader>8 :r~/.vim/templates/log.txt<CR>
+"nmap <Leader>2 :r~/.vim/templates/console.txt<CR>
+" Add this to your .vimrc or init.vim
+function! InsertTemplate()
+    let filetype = &filetype
+    if filetype ==# 'python'
+        execute "r ~/.vim/templates/log.txt"
+    elseif filetype ==# 'typescriptreact' || filetype ==# 'javascript' || filetype ==# 'typescript' || filetype ==# 'tsx'
+        execute "r ~/.vim/templates/console.txt"
+    else
+        echo "No template found for this filetype"
+    endif
+endfunction
+
+" Now use <Leader>2 to call the function
+nmap <Leader>2 :call InsertTemplate()<CR>
+nmap <Leader>8 :call InsertTemplate()<CR>
+
 
 set foldlevel=99
 
@@ -236,6 +255,7 @@ autocmd BufNewFile,BufRead *.ts set filetype=typescript
 "autocmd BufNewFile,BufRead *.tsx set filetype=typescript
 autocmd BufNewFile,BufRead *.tsx set filetype=typescriptreact
 autocmd BufNewFile,BufRead *.jsx set filetype=javascript
+autocmd BufNewFile,BufRead *.mjs set filetype=javascript
 autocmd BufNewFile,BufRead *.hbs set filetype=html
 autocmd BufNewFile,BufRead *.vue set filetype=html
 autocmd BufNewFile,BufRead *.py_in set filetype=python
@@ -250,7 +270,7 @@ nnoremap <Leader>p :FZF<CR>
 nmap <Leader>n :set nonu norelativenumber<CR>:GitGutterDisable<CR>
 au FileType yaml setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
 
-autocmd TextChanged,TextChangedI <buffer> silent write
+autocmd TextChanged,TextChangedI <buffer> if &readonly==0 | silent write | endif
 
 nnoremap gs :Gstatus<CR>
 nnoremap gc :Gcommit<CR>
@@ -348,7 +368,6 @@ let NERDTreeMinimalUI = 1
 let g:ctrlp_cache_dir = $HOME . '/.cache/ctrlp'
 let g:ctrlp_clear_cache_on_exit = 0
 set foldmethod=syntax
-let g:github_enterprise_urls = ['https://git.zooxlabs.com']
 
 
 " Create a function to reload vimrc. Checks if it already exists to avoid
@@ -367,68 +386,68 @@ function! GotoProtoDef()
 endfunction
 nnoremap gp :call GotoProtoDef()<CR>
 
-function! SwitchSourceHeader()
- " Get the current file extension. To see what this command is doing,
- " see :help expand.
- let l:cur_ext=expand("%:e")
- " See if we have a source file (ending in .cpp or .cc).
- if (expand ("%:e") == "cpp" || expand ("%:e") == "cc"|| expand ("%:e") == "cu.cpp")
-   " %:t gives the basename with extension, :r trims the extension.
-   " Try searching for both .h and .hpp extensions, and open the first file
-   " that is found.
-   let l:h_path=expand("%:r") . ".h"
-   let l:hpp_path=expand("%:r") . ".hpp"
-   if filereadable(h_path)
-     find %:t:r.h
-   elseif filereadable(hpp_path)
-     find %:t:r.hpp
-   endif
- else
-   let l:cpp_path=expand("%:r") . ".cpp"
-   let l:cc_path=expand("%:r") . ".cc"
-   if filereadable(cpp_path)
-     find %:t:r.cpp
-   elseif filereadable(cc_path)
-     find %:t:r.cc
-   endif
- endif
-endfunction
+"function! SwitchSourceHeader()
+ "" Get the current file extension. To see what this command is doing,
+ "" see :help expand.
+ "let l:cur_ext=expand("%:e")
+ "" See if we have a source file (ending in .cpp or .cc).
+ "if (expand ("%:e") == "cpp" || expand ("%:e") == "cc"|| expand ("%:e") == "cu.cpp")
+   "" %:t gives the basename with extension, :r trims the extension.
+   "" Try searching for both .h and .hpp extensions, and open the first file
+   "" that is found.
+   "let l:h_path=expand("%:r") . ".h"
+   "let l:hpp_path=expand("%:r") . ".hpp"
+   "if filereadable(h_path)
+     "find %:t:r.h
+   "elseif filereadable(hpp_path)
+     "find %:t:r.hpp
+   "endif
+ "else
+   "let l:cpp_path=expand("%:r") . ".cpp"
+   "let l:cc_path=expand("%:r") . ".cc"
+   "if filereadable(cpp_path)
+     "find %:t:r.cpp
+   "elseif filereadable(cc_path)
+     "find %:t:r.cc
+   "endif
+ "endif
+"endfunction
 
-nmap ,s :call SwitchSourceHeader()<CR>
+"nmap ,s :call SwitchSourceHeader()<CR>
 vnoremap // y/<C-R>"<CR>
 
-function! UpdateDeps()
-  let l:fname=expand('%:p')
-  py3f /mnt/flashblade/carden/utils/update_deps_vim.py
-  call input('Press any key to continue')
-  redraw!
-  execute 'edit' l:fname
-endfunction
-nnoremap ,u :call UpdateDeps()<cr>
+"function! UpdateDeps()
+  "let l:fname=expand('%:p')
+  "py3f /mnt/flashblade/carden/utils/update_deps_vim.py
+  "call input('Press any key to continue')
+  "redraw!
+  "execute 'edit' l:fname
+"endfunction
+"nnoremap ,u :call UpdateDeps()<cr>
 let g:ctrlp_working_path_mode = 'ra'
 "set shellpipe=>
 "set t_ti= t_te=
 "
 let g:ycm_complete_in_comments = 1
-function! GetBazelTargetForFile()
-   let query = "bazel query --universe_scope='//...' --order_output=no \"allrdeps($(bazel query " . expand('%') . "), 1)\" | tr '\\n' ' '"
-   let target = system(query)
-   return target
-endfunction
+"function! GetBazelTargetForFile()
+   "let query = "bazel query --universe_scope='//...' --order_output=no \"allrdeps($(bazel query " . expand('%') . "), 1)\" | tr '\\n' ' '"
+   "let target = system(query)
+   "return target
+"endfunction
 
-function! BazelCmd(action, ...)
- let target = (a:0 == 0) ? GetBazelTargetForFile() : join(a:000, " ")
- let tmp_file = "/tmp/bazel_vim_stderr.txt"
- let error_regex = "^[^: ]*:[0-9]\\{1,\\}:[0-9]\\{1,\\}:\\s*\\(error\\|required from here$\\)"
- let cmd = "bazel " . a:action . " " . target . " 2>&1 | tee >(grep '" . error_regex . "' >" . tmp_file . ")"
- exec "!" . cmd
- cexpr! system("cat " . tmp_file)
- if (len(getqflist()) > 0)
-   copen
- endif
-endfunction
+"function! BazelCmd(action, ...)
+ "let target = (a:0 == 0) ? GetBazelTargetForFile() : join(a:000, " ")
+ "let tmp_file = "/tmp/bazel_vim_stderr.txt"
+ "let error_regex = "^[^: ]*:[0-9]\\{1,\\}:[0-9]\\{1,\\}:\\s*\\(error\\|required from here$\\)"
+ "let cmd = "bazel " . a:action . " " . target . " 2>&1 | tee >(grep '" . error_regex . "' >" . tmp_file . ")"
+ "exec "!" . cmd
+ "cexpr! system("cat " . tmp_file)
+ "if (len(getqflist()) > 0)
+   "copen
+ "endif
+"endfunction
 
-command -nargs=* Bazel :call BazelCmd(<f-args>)
+"command -nargs=* Bazel :call BazelCmd(<f-args>)
 set modelines=0
 set nomodeline
 set autoread
@@ -459,65 +478,65 @@ let g:ycm_confirm_extra_conf = 0
 let NERDTreeIgnore = ['__pycache__$']
 
 
-function! DoInsertHeader(filename) abort
-  let search_flags = "bnW" " backwards, don't move cursor, no wrap
-  let include_line = "#include \"" . a:filename . "\""
-  if search("^" . include_line, search_flags) != 0
-    return
-  endif
+"function! DoInsertHeader(filename) abort
+  "let search_flags = "bnW" " backwards, don't move cursor, no wrap
+  "let include_line = "#include \"" . a:filename . "\""
+  "if search("^" . include_line, search_flags) != 0
+    "return
+  "endif
 
-  let last_include_line = search("^#include ", search_flags)
-  " We want to include only after angle bracket includes. To
-  " guarantee this, we replace "<" with "!" which lets the
-  " ascii sorting order take care of the include sorting
-  while (substitute(getline(last_include_line), "<", "!", "") > include_line)
-    let last_include_line = last_include_line - 1
-  endwhile
-  call append(last_include_line, [include_line])
-endfunction
-function! DoInsertHeader(filename) abort
-  let search_flags = "bnW" " backwards, don't move cursor, no wrap
-  let include_line = "#include \"" . a:filename . "\""
-  if search("^" . include_line, search_flags) != 0
-    return
-  endif
+  "let last_include_line = search("^#include ", search_flags)
+  "" We want to include only after angle bracket includes. To
+  "" guarantee this, we replace "<" with "!" which lets the
+  "" ascii sorting order take care of the include sorting
+  "while (substitute(getline(last_include_line), "<", "!", "") > include_line)
+    "let last_include_line = last_include_line - 1
+  "endwhile
+  "call append(last_include_line, [include_line])
+"endfunction
+"function! DoInsertHeader(filename) abort
+  "let search_flags = "bnW" " backwards, don't move cursor, no wrap
+  "let include_line = "#include \"" . a:filename . "\""
+  "if search("^" . include_line, search_flags) != 0
+    "return
+  "endif
 
-  let last_include_line = search("^#include ", search_flags)
-  " We want to include only after angle bracket includes. To
-  " guarantee this, we replace "<" with "!" which lets the
-  " ascii sorting order take care of the include sorting
-  while (substitute(getline(last_include_line), "<", "!", "") > include_line)
-    let last_include_line = last_include_line - 1
-  endwhile
-  call append(last_include_line, [include_line])
-endfunction
+  "let last_include_line = search("^#include ", search_flags)
+  "" We want to include only after angle bracket includes. To
+  "" guarantee this, we replace "<" with "!" which lets the
+  "" ascii sorting order take care of the include sorting
+  "while (substitute(getline(last_include_line), "<", "!", "") > include_line)
+    "let last_include_line = last_include_line - 1
+  "endwhile
+  "call append(last_include_line, [include_line])
+"endfunction
 
 
 " Get header options for tag under the cursor. This
 " function has a strange signature because it is not
 " meant to be called directly and should be used as
 " a completion function instead
-function! GetIncludeFiles(arglead, line, pos) abort
-  " Using match-case enables binary searching for tags
-  " and also provides more accurate results for headers.
-  let tagcase_tmp = &l:tagcase
-  let &l:tagcase = "match"
-  let tag_regex = "^" . expand("<cword>") . "$"
-  let filename = expand("%")
+"function! GetIncludeFiles(arglead, line, pos) abort
+  "" Using match-case enables binary searching for tags
+  "" and also provides more accurate results for headers.
+  "let tagcase_tmp = &l:tagcase
+  "let &l:tagcase = "match"
+  "let tag_regex = "^" . expand("<cword>") . "$"
+  "let filename = expand("%")
 
-  let tags = taglist(tag_regex, filename)
-  let files1 = filter(tags, {idx, val -> val.filename =~ '.h$'})
-  let files2 = map(files1, {idx, val -> val.filename})
+  "let tags = taglist(tag_regex, filename)
+  "let files1 = filter(tags, {idx, val -> val.filename =~ '.h$'})
+  "let files2 = map(files1, {idx, val -> val.filename})
 
-  let &l:tagcase = tagcase_tmp
-  return uniq(files2)
-endfunction
+  "let &l:tagcase = tagcase_tmp
+  "return uniq(files2)
+"endfunction
 
 
 " Insert include file for tag under the cursor
 "set wildcharm=<C-x>
-command! -nargs=1 -complete=customlist,GetIncludeFiles InsertHeader
-      \ :call DoInsertHeader(<f-args>)
+"command! -nargs=1 -complete=customlist,GetIncludeFiles InsertHeader
+      "\ :call DoInsertHeader(<f-args>)
 let g:autoflake_remove_all_unused_imports=1
 let g:autoflake_disable_show_diff=1
 
@@ -532,19 +551,85 @@ function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~ '\s'
 endfunction
-"let g:neoformat_only_msg_on_error = 1
+let g:neoformat_only_msg_on_error = 1
 autocmd BufWritePre *.js PrettierAsync
 autocmd BufWritePre *.ts PrettierAsync
 autocmd BufWritePre *.tsx PrettierAsync
 autocmd BufWritePre *.jsx PrettierAsync
-"command  
-"function! s:SomeFunc(command)
-"endfunction
-    "Gdiffsplit(command)
-"command! -nargs=* Gdiff :call SomeFunc(<q-args>)
-
+autocmd BufWritePre *.py Neoformat
 
 set diffopt+=vertical
 
 tnoremap <expr> <Esc> (&filetype == "fzf") ? "<Esc>" : "<c-\><c-n>"
 let g:SuperTabDefaultCompletionType = "<c-n>"
+
+nnoremap <Leader>t :Silent ctags -R --exclude=*/node_modules/* --exclude=@/Users/jrs/.ctagsignore -o ./.tags `pwd` <CR>
+let g:tagbar_type_solidity = {
+    \ 'ctagstype': 'solidity',
+    \ 'kinds' : [
+        \ 'c:contracts',
+        \ 'e:events',
+        \ 'f:functions',
+        \ 'm:mappings',
+        \ 'v:varialbes',
+    \ ]
+\ }
+
+let g:tagbar_type_typescript = {
+  \ 'ctagstype' : 'typescript',
+  \ 'kinds': [
+    \ 'e:enums:0:1',
+    \ 'f:function:0:1',
+    \ 't:typealias:0:1',
+    \ 'M:Module:0:1',
+    \ 'I:import:0:1',
+    \ 'i:interface:0:1',
+    \ 'C:class:0:1',
+    \ 'm:method:0:1',
+    \ 'p:property:0:1',
+    \ 'v:variable:0:1',
+    \ 'c:const:0:1',
+  \ ],
+  \ 'sort' : 0
+  \ }
+
+
+" auto enter paste mode when pasting!!!!!!
+let &t_SI .= "\<Esc>[?2004h"
+let &t_EI .= "\<Esc>[?2004l"
+
+inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
+
+function! XTermPasteBegin()
+      set pastetoggle=<Esc>[201~
+        set paste
+          return ""
+endfunction
+
+" better paren hightlighting
+hi MatchParen cterm=bold ctermbg=none ctermfg=magenta
+
+let g:instant_markdown_autostart = 0
+cnoreabbrev Gbrowse GBrowse
+
+let g:neoformat_python = {
+\ 'exe': 'autopep8',
+\ 'args': ['--single-quote', '--quiet'],
+\ }
+
+"" Enable alignment
+"let g:neoformat_basic_format_align = 1
+
+"" Enable tab to space conversion
+"let g:neoformat_basic_format_retab = 1
+
+"" Enable trimmming of trailing whitespace
+"let g:neoformat_basic_format_trim = 1
+"let g:neoformat_python_black_quotes = "single"
+"let g:neoformat_python_yapf_quotes = "single"
+"let g:neoformat_python_autopep8_quotes = "single"
+
+"let g:neoformat_python_black = { 'exe': 'black', 'args': ['--single-quote', '-'], 'stdin': 1 }
+
+"let g:black_skip_string_normalization = 1
+
