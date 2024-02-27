@@ -89,8 +89,8 @@ syntax enable
 let g:solarized_termcolors=256
 set background=light
 "set background=dark
-"colorscheme monokai
-colorscheme solarized
+colorscheme molokai
+"colorscheme solarized
 "colorscheme blackboard
 "colorscheme PaperColor
 "colorscheme Atelier_ForestDar
